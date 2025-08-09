@@ -1,4 +1,8 @@
-﻿List<string> VeiculosEstacionados = new List<string>();
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+
+List<string> VeiculosEstacionados = new List<string>();
 
 Console.WriteLine("Seja bem-vindo ao sistema de estacionamento!");
 Console.WriteLine("Digite o preço inicial:");
@@ -8,7 +12,6 @@ Console.WriteLine("Digite o preço por hora:");
 decimal precoPorHora = Convert.ToDecimal(Console.ReadLine());
 
 bool executando = true;
-
 
 do
 {
@@ -24,12 +27,10 @@ do
     {
         case 1:
             Console.WriteLine("Digite a placa do veículo para estacionar:");
-            string placa = Console.ReadLine();
-            if (placa != null)
+            string placa != null)
             {
                 VeiculosEstacionados.Add(placa);
                 Console.WriteLine($"Veículo com placa {placa} estacionado com sucesso!");
-
             }
             break;
 
@@ -39,13 +40,23 @@ do
 
             if (VeiculosEstacionados.Contains(placaRemover))
             {
-                Console.WriteLine("Digite a quantidade de horas que o veículo permaneceu estacionado:");
-                int horasEstacionado = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Digite o tempo estacionado (formato HH:mm):");
+                string tempo = Console.ReadLine();
 
-                decimal precoAPagar = precoInicial + (precoPorHora * horasEstacionado);
-                VeiculosEstacionados.Remove(placaRemover);
+                if (TimeSpan.TryParseExact(tempo, @"h\:m", out TimeSpan tempoEstacionado))
+                {
+                    decimal totalMinutos = decimal tempoEstacionado.TotalMinutes;
+                    decimal precoPorMinuto = precoPorHora / 60;
+                    decimal precoAPagar = precoInicial + (precoPorMinuto * totalMinutos);
 
-                Console.WriteLine($"O veículo {placaRemover} foi removido e o preço foi de R$ {precoAPagar}");
+                    VeiculosEstacionados.Remove(placaRemover);
+
+                    Console.WriteLine($"O veículo {placaRemover} foi removido e o preço foi de R$ {precoAPagar:F2}");
+                }
+                else
+                {
+                    Console.WriteLine("Formato de tempo inválido. Use HH:mm (ex: 3:45).");
+                }
             }
             else
             {
@@ -77,5 +88,6 @@ do
             Console.WriteLine("Opção inválida. Tente novamente.");
             break;
     }
+
 }
 while (executando);
