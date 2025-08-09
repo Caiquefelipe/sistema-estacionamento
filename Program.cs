@@ -27,10 +27,16 @@ do
     {
         case 1:
             Console.WriteLine("Digite a placa do veículo para estacionar:");
-            string placa != null)
+            string placa = Console.ReadLine(); // CORRIGIDO: faltava atribuição correta
+
+            if (!string.IsNullOrWhiteSpace(placa))
             {
                 VeiculosEstacionados.Add(placa);
                 Console.WriteLine($"Veículo com placa {placa} estacionado com sucesso!");
+            }
+            else
+            {
+                Console.WriteLine("Placa inválida. Tente novamente.");
             }
             break;
 
@@ -43,9 +49,10 @@ do
                 Console.WriteLine("Digite o tempo estacionado (formato HH:mm):");
                 string tempo = Console.ReadLine();
 
-                if (TimeSpan.TryParseExact(tempo, @"h\:m", out TimeSpan tempoEstacionado))
-                {
-                    decimal totalMinutos = decimal tempoEstacionado.TotalMinutes;
+                 if (TimeSpan.TryParse(tempo, out TimeSpan tempoEstacionado))
+
+                    {
+                        decimal totalMinutos = (decimal)tempoEstacionado.TotalMinutes;
                     decimal precoPorMinuto = precoPorHora / 60;
                     decimal precoAPagar = precoInicial + (precoPorMinuto * totalMinutos);
 
@@ -89,5 +96,4 @@ do
             break;
     }
 
-}
-while (executando);
+} while (executando);
